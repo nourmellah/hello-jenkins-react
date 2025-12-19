@@ -1,73 +1,54 @@
-# React + TypeScript + Vite
+# Jenkins CI/CD – React TypeScript Hello World
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Project description
+This project demonstrates a complete local CI/CD pipeline using Jenkins for a simple React + TypeScript application that displays **Hello World**.
 
-Currently, two official plugins are available:
+The pipeline performs:
+- Source code checkout
+- Dependency installation
+- Linting
+- Automated tests
+- Production build
+- Docker image creation
+- Local deployment using Docker
+- Smoke test
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Application
+- React + TypeScript (Vite)
+- Single page displaying **Hello World**
 
-## React Compiler
+## Prerequisites
+- Docker
+- Git
+- Node.js (only for local development, not required by Jenkins)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Jenkins setup (local)
+Jenkins is run locally using Docker with Node.js and Docker CLI available inside the container.
 
-## Expanding the ESLint configuration
+Main Jenkins job configuration:
+- Type: Pipeline
+- Definition: Pipeline script from SCM
+- SCM: Git
+- Branch: main
+- Script path: Jenkinsfile
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## CI/CD Pipeline stages
+1. Checkout source code from GitHub
+2. Install dependencies (npm ci)
+3. Lint the code
+4. Run automated tests
+5. Build the React application
+6. Archive build artifacts
+7. Build Docker image
+8. Deploy container locally
+9. Smoke test via HTTP request
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Verification
+After a successful Jenkins build:
+- Open http://localhost:3001
+- The page should display **Hello World**
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Repository content
+- Jenkinsfile: Jenkins pipeline definition
+- Dockerfile: React build and Nginx runtime image
+- src/: Application source code
